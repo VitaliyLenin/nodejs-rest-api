@@ -24,9 +24,13 @@ const validateContactStatus = (schema) => {
 
 const validateAddContact = (schema) => {
   const func = async (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-      next(HttpError(400, "missing required field"));
+      const fieldName = error.details.map((detail) => detail.context.key);
+      const message = `Missing required ${fieldName.join(", ")} ${
+        fieldName.length === 1 ? "field" : "fields"
+      }`;
+      next(HttpError(400, message));
     }
     next();
   };
