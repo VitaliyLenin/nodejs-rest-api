@@ -21,6 +21,7 @@ const register = async (req, res, next) => {
 
     res.status(201).json({
       email: result.email,
+      subscription: "starter",
     });
   } catch (error) {
     next(error);
@@ -61,7 +62,12 @@ const login = async (req, res, next) => {
 
 const getCurrent = async (req, res) => {
   const { email } = req.user;
-  res.json({ email });
+  res.status(200).json({
+    user: {
+      email,
+      subscription: "starter",
+    },
+  });
 };
 
 const logout = async (req, res) => {
