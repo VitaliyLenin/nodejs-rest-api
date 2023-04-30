@@ -10,27 +10,36 @@ const {
   validateContactStatus,
   validateAddContact,
 } = require("../../utils/validate");
+
 const isValidId = require("../../middlewares/isValidId");
+const authenticate = require("../../middlewares/authenticate");
 
-router.get("/", ctrl.getContacts);
+router.get("/", authenticate, ctrl.getContacts);
 
-router.get("/:id", isValidId, ctrl.getContactById);
+router.get("/:id", authenticate, isValidId, ctrl.getContactById);
 
-router.post("/", validateAddContact(schemas.addSchema), ctrl.addContact);
+router.post(
+  "/",
+  authenticate,
+  validateAddContact(schemas.addSchema),
+  ctrl.addContact
+);
 
 router.put(
   "/:id",
+  authenticate,
   isValidId,
   validateBody(schemas.updateSchema),
   ctrl.updateContact
 );
 router.patch(
   "/:id/favorite",
+  authenticate,
   isValidId,
   validateContactStatus(schemas.updateStatusSchema),
   ctrl.updateFavorite
 );
 
-router.delete("/:id", isValidId, ctrl.deleteContact);
+router.delete("/:id", authenticate, isValidId, ctrl.deleteContact);
 
 module.exports = router;
