@@ -2,7 +2,10 @@ const express = require("express");
 
 const ctrl = require("../../controllers/user-controllers");
 
-const { validateUserBody } = require("../../utils/validate");
+const {
+  validateUserBody,
+  validateEmailVerify,
+} = require("../../utils/validate");
 
 const { schemas } = require("../../models/user");
 
@@ -20,6 +23,13 @@ router.post(
 router.post("/login", validateUserBody(schemas.userAuthSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);
+
+router.get("/verify/verificationToken", ctrl.verify);
+router.post(
+  "/verify",
+  validateEmailVerify(schemas.emailSchema),
+  ctrl.resendEmailVerify
+);
 
 router.post("/logout", authenticate, ctrl.logout);
 
