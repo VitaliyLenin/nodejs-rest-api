@@ -24,7 +24,7 @@ router.post("/login", validateUserBody(schemas.userAuthSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
-router.get("/verify/verificationToken", ctrl.verify);
+router.get("/verify/:verificationToken", ctrl.verify);
 router.post(
   "/verify",
   validateEmailVerify(schemas.emailSchema),
